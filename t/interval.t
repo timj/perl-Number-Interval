@@ -3,7 +3,7 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 115;
+use Test::More tests => 116;
 
 require_ok( 'Number::Interval' );
 
@@ -297,6 +297,8 @@ $r2 = new Number::Interval( Min => 4, IncMax => 1 );
 ok($r1 != $r2,"not equal to >= 4 (with incmax set)");
 
 
-# string test
+# min == max
 $r1 = new Number::Interval( Min => 4, Max => 4 );
 is( "$r1", "==4", "min == max");
+
+ok( $r1->contains( 4 ), "Does 4==4 contain 4");

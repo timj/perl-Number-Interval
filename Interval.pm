@@ -370,6 +370,9 @@ Determine whether a supplied value is within the defined intervals.
 
 If both intervals are undefined, always returns true.
 
+If the min == max, returns true if the supplied value is that
+value, regardless of IncMin and IncMax setttings.
+
 =cut
 
 sub contains {
@@ -410,7 +413,9 @@ sub contains {
   } else {
     # normal interval
     if (defined $max and defined $min) {
-      if ($self->inc_max && $self->inc_min) {
+      if ($max == $min) {
+	$contains = 1;
+      } elsif ($self->inc_max && $self->inc_min) {
 	if ($value <= $max && $value >= $min) {
 	  $contains = 1;
 	}

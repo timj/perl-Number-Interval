@@ -1,6 +1,7 @@
 2005-03-10  Tim Jenness  <timj@jach.hawaii.edu>
 
 	* Interval.pm (stringify): Recognize that sometimes min == max
+	(contains): If min==max then $range->contains($max)
 
 2005-03-09  Tim Jenness  <timj@jach.hawaii.edu>
 
