@@ -3,7 +3,7 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 100;
+use Test::More tests => 105;
 
 require_ok( 'Number::Interval' );
 
@@ -13,7 +13,7 @@ isa_ok( $r, "Number::Interval" );
 # Easy
 is($r->min, 5,"Check min");
 is($r->max, 20,"Check max");
-is("$r","5-20","Check stringification");
+is("$r","5 <  x <  20","Check stringification");
 ok(!$r->isinverted,"Check not inverted interval");
 
 # Test an accessor
@@ -259,4 +259,12 @@ ok($r1->intersection($r2));
 is($r1->max, 1);
 is($r1->min, 5);
 
+
+# Inclusive interval
+my $int2 = new Number::Interval( Min => 5, Max => 10, IncMin => 1);
+is("$int2","5 <= x <  10","Check stringification");
+ok( $int2->contains( 5 ), "Contains 5");
+ok( $int2->contains( 6 ), "Contains 6");
+ok( !$int2->contains( 10 ), "Does not contain 10");
+ok( !$int2->contains( 4 ), "Does not contain 4");
 

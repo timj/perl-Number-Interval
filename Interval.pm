@@ -52,7 +52,23 @@ Create a new object. Can be populated when supplied with
 keys C<Max> and C<Min>.
 
   $r = new Number::Interval();
+
+This interval is Inf.
+
   $r = new Number::Interval( Max => 5 );
+
+This interval is > 5.
+
+  $r = new Number::Interval( Max => 5, Min => 22 );
+
+This interval is > 22 and < 5.
+
+By default the interval does not include the bounds themselves. They
+can be included by using the IncMax and IncMin keys.
+
+  $r = new Number::Interval( Max => 5, IncMax => 1 );
+
+The above interval is >=5
 
 =cut
 
@@ -65,6 +81,8 @@ sub new {
   my $r = {
 	   Min => undef,
 	   Max => undef,
+	   IncMax => 0,
+	   IncMin => 0,
 	  };
 
   # Create object
@@ -73,6 +91,8 @@ sub new {
   # Populate it
   $obj->min( $args{Min}) if exists $args{Min};
   $obj->max( $args{Max}) if exists $args{Max};
+  $obj->inc_min( $args{IncMin}) if exists $args{IncMin};
+  $obj->inc_max( $args{IncMax}) if exists $args{IncMax};
 
   return $obj;
 }
@@ -96,10 +116,7 @@ C<undef> indicates that the interval has no upper bound.
 
 sub max {
   my $self = shift;
-  if (@_) {
-    my $max = shift;
-    $self->{Max} = $max;
-  }
+  $self->{Max} = shift if @_;
   return $self->{Max};
 }
 
@@ -118,6 +135,45 @@ sub min {
   my $self = shift;
   $self->{Min} = shift if @_;
   return $self->{Min};
+}
+
+=item B<inc_max>
+
+Return (or set) the boolean indicating whether the maximum bound
+of the interval should be included in the bound definition. If true,
+the bounds will be >= max.
+
+  $inc = $r->inc_max;
+  $r->inc_max( 1 );
+
+Default is false (not included).
+
+=cut
+
+sub inc_max {
+  my $self = shift;
+  $self->{IncMax} = shift if @_;
+  return $self->{IncMax};
+}
+
+
+=item B<inc_min>
+
+Return (or set) the boolean indicating whether the minimum bound
+of the interval should be included in the bound definition. If true,
+the bounds will be <= min.
+
+  $inc = $r->inc_min;
+  $r->inc_min( 1 );
+
+Default is false (not included).
+
+=cut
+
+sub inc_min {
+  my $self = shift;
+  $self->{IncMin} = shift if @_;
+  return $self->{IncMin};
 }
 
 =item B<minmax>
@@ -193,18 +249,21 @@ sub stringify {
   my $min = $self->min;
   my $max = $self->max;
 
-  if (defined $min and defined $max) {
+  my $inc_min = ( $self->inc_min ? "=" : " " );
+  my $inc_max = ( $self->inc_max ? "=" : " " );
+
+  if (defined $min && defined $max) {
     # Bound
     no warnings 'numeric'; #KLUGE
     if ($max < $min) {
-      return "< $max and > $min";
+      return "<$inc_max$max and >$inc_min$min";
     } else {
-      return "$min-$max";
+      return "$min <$inc_min x <$inc_max $max";
     }
   } elsif (defined $min) {
-    return "> $min";
+    return ">$inc_min$min";
   } elsif (defined $max) {
-    return "< $max";
+    return "<$inc_max$max";
   } else {
     return "Inf";
   }
@@ -266,7 +325,11 @@ sub equate {
   no warnings 'numeric'; # KLUGE
   return 0 if $self->min != $comparison->min;
   return 0 if $self->max != $comparison->max;
-
+  return 0 if ( ($self->inc_max && $comparison->inc_max) ||
+		(!$self->inc_max && !$comparison->inc_max) );
+  return 0 if ( ($self->inc_min && $comparison->inc_min) ||
+		(!$self->inc_min && !$comparison->inc_min) );
+  return 1;
 }
 
 =item B<contains>
@@ -292,9 +355,24 @@ sub contains {
   if ($self->isinverted) {
     # Inverted interval. Both max and min must be defined
     if (defined $max and defined $min) {
-      if ($value < $max || $value > $min) {
-	$contains = 1;
+      if ($self->inc_max && $self->inc_min) {
+	if ($value <= $max || $value >= $min) {
+	  $contains = 1;
+	}
+      } elsif ($self->inc_max) {
+	if ($value <= $max || $value > $min) {
+	  $contains = 1;
+	}
+      } elsif ($self->inc_min) {
+	if ($value < $max || $value >= $min) {
+	  $contains = 1;
+	}
+      } else {
+	if ($value < $max || $value > $min) {
+	  $contains = 1;
+	}
       }
+
     } else {
       croak "An interval can not be inverted with only one defined value";
     }
@@ -302,15 +380,36 @@ sub contains {
   } else {
     # normal interval
     if (defined $max and defined $min) {
-      if ($value < $max && $value > $min) {
-	$contains = 1;
+      if ($self->inc_max && $self->inc_min) {
+	if ($value <= $max && $value >= $min) {
+	  $contains = 1;
+	}
+      } elsif ($self->inc_max) {
+	if ($value <= $max && $value > $min) {
+	  $contains = 1;
+	}
+      } elsif ($self->inc_min) {
+	if ($value < $max && $value >= $min) {
+	  $contains = 1;
+	}
+      } else {
+	if ($value < $max && $value > $min) {
+	  $contains = 1;
+	}
       }
     } elsif (defined $max) {
-      $contains = 1 if $value < $max;
+      if ($self->inc_max) {
+	$contains = 1 if $value <= $max;
+      } else {
+	$contains = 1 if $value <= $max;
+      }
     } elsif (defined $min) {
-      $contains = 1 if $value > $min;
+      if ($self->inc_min) {
+	$contains = 1 if $value >= $min;
+      } else {
+	$contains = 1 if $value > $min;
+      }
     }
-
   }
 
   return $contains;
