@@ -38,7 +38,7 @@ use overload
 # CVS ID: $Id$
 
 use vars qw/ $VERSION /;
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 =head1 METHODS
 
@@ -275,6 +275,8 @@ Determine whether a supplied value is within the defined intervals.
 
   $is = $i->contains( $value );
 
+If both intervals are undefined, always returns true.
+
 =cut
 
 sub contains {
@@ -283,6 +285,7 @@ sub contains {
 
   my $max = $self->max;
   my $min = $self->min;
+  return 1 if (!defined $max && !defined $min);
 
   # Assume it doesnt match the interval
   my $contains = 0;
