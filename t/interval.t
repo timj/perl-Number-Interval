@@ -3,7 +3,7 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 105;
+use Test::More tests => 114;
 
 require_ok( 'Number::Interval' );
 
@@ -268,3 +268,30 @@ ok( $int2->contains( 6 ), "Contains 6");
 ok( !$int2->contains( 10 ), "Does not contain 10");
 ok( !$int2->contains( 4 ), "Does not contain 4");
 
+# Test equality
+$r1 = new Number::Interval( Max => 20, Min => 4);
+ok( $r1->equate( new Number::Interval( Max => 20, Min => 4) ), 
+    "Bound Equality");
+
+$r1 = new Number::Interval( Max => undef, Min => 4);
+ok( $r1->equate( new Number::Interval( Min => 4) ), "Unbound Equality");
+
+$r2 = new Number::Interval( Min => 4 );
+
+ok($r1 eq $r2, "overloaded 'eq' equals");
+ok($r1 == $r2, "overloaded '==' equals");
+is($r1, $r2, "Test::More overloaded is equals");
+
+# and make something not match
+$r2 = new Number::Interval();
+ok($r1 != $r2,"not equal to undef interval");
+
+$r2 = new Number::Interval( Max => 4, Min => 20);
+ok($r1 != $r2,"not equal to 4 - 20");
+
+# make sure that the Inc flags work properly
+$r2 = new Number::Interval( Min => 4, IncMin => 1 );
+ok($r1 != $r2,"not equal to >= 4");
+
+$r2 = new Number::Interval( Min => 4, IncMax => 1 );
+ok($r1 != $r2,"not equal to >= 4 (with incmax set)");
