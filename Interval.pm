@@ -33,7 +33,10 @@ use warnings;
 use Carp;
 use overload 
   '""' => "stringify",
-  'eq' => "equate";
+  '==' => 'equate',
+  'eq' => "equate",
+  '!=' => "notequal",
+  'ne' => "notequal";
 
 # CVS ID: $Id$
 
@@ -322,14 +325,39 @@ sub equate {
   # Need to check that both are objects
   return 0 unless defined $comparison;
   return 0 unless UNIVERSAL::isa($comparison, "Number::Interval");
-  no warnings 'numeric'; # KLUGE
-  return 0 if $self->min != $comparison->min;
-  return 0 if $self->max != $comparison->max;
-  return 0 if ( ($self->inc_max && $comparison->inc_max) ||
-		(!$self->inc_max && !$comparison->inc_max) );
-  return 0 if ( ($self->inc_min && $comparison->inc_min) ||
-		(!$self->inc_min && !$comparison->inc_min) );
+
+  # need to be explicit about undefs
+  # return false immediately we find a difference
+  for my $m (qw/ min max/) {
+    # first values
+    if ( defined $comparison->$m() ) {
+      return 0 if !defined $self->$m();
+      return 0 if $comparison->$m() != $self->$m();
+    } else {
+      return 0 if defined $self->$m();
+    }
+
+    # then boolean
+    my $incm = 'inc_' . $m;
+
+    # return false if state of one is NOT the other
+    return 0 if ( ( $self->$incm() && !$comparison->$incm() ) ||
+		  ( !$self->$incm() && $comparison->$incm() ) );
+  }
   return 1;
+}
+
+=item B<notequal>
+
+Inverse of C<equate>. Used by the tied interface to implement !=.
+
+  $i1 != $i2
+
+=cut
+
+sub notequal {
+  my $self = shift;
+  return !$self->equate( @_ );
 }
 
 =item B<contains>

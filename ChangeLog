@@ -1,3 +1,10 @@
+2005-03-09  Tim Jenness  <timj@jach.hawaii.edu>
+
+	* t/interval.t: Add new tests for == and !=
+
+	* Interval.pm (equate): Fix logic when using incmax/incmin flags
+	and when undefs are included
+
 2005-02-11  Tim Jenness  <timj@jach.hawaii.edu>
 
 	* Interval.pm: Add inc_max and inc_min attributes. Interval can
