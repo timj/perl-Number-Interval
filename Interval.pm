@@ -258,7 +258,9 @@ sub stringify {
   if (defined $min && defined $max) {
     # Bound
     no warnings 'numeric'; #KLUGE
-    if ($max < $min) {
+    if ($min == $max) {
+      return "==$min";
+    } elsif ($max < $min) {
       return "<$inc_max$max and >$inc_min$min";
     } else {
       return "$min <$inc_min x <$inc_max $max";
