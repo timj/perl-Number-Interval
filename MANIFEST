@@ -3,3 +3,4 @@ MANIFEST
 Makefile.PL
 README
 t/interval.t
+META.yml                                 Module meta-data (added by MakeMaker)
