@@ -299,27 +299,33 @@ sub stringify {
   my $min = $self->min;
   my $max = $self->max;
 
-  my $inc_min = ( $self->inc_min ? "=" : " " );
-  my $inc_max = ( $self->inc_max ? "=" : " " );
+  # are we inclusive (for unbound ranges)
+  my $inc_min_ub = ( $self->inc_min ? "=" : " " );
+  my $inc_max_ub = ( $self->inc_max ? "=" : " " );
 
   if (defined $min && defined $max) {
     # Bound
-    no warnings 'numeric'; #KLUGE
+
+    # use standard interval notation when using a bound range
+    my $inc_min_b = ( $self->inc_min ? "[" : "(" );
+    my $inc_max_b = ( $self->inc_max ? "]" : ")" );
+
     if ($min == $max) {
+      # no range
       return "==$min";
     } elsif ($max < $min) {
-      return "<$inc_max$max and >$inc_min$min";
+      return "<$inc_max_ub$max and >$inc_min_ub$min";
     } else {
       if ($min <= 0 && $self->pos_def) {
-	return "<$inc_max$max";
+	return "<$inc_max_ub$max";
       } else {
-	return "$min <$inc_min x <$inc_max $max";
+	return "$inc_min_b$min,$max$inc_max_b";
       }
     }
   } elsif (defined $min) {
-    return ">$inc_min$min";
+    return ">$inc_min_ub$min";
   } elsif (defined $max) {
-    return "<$inc_max$max";
+    return "<$inc_max_ub$max";
   } else {
     return "Inf";
   }

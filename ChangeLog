@@ -4,7 +4,7 @@
 	(contains): If min==max then $range->contains($max)
 	(stringify): Add positive definite setting to allow positive
 	ranges to be stringified without including the 0
-	
+	(stringify): Use Interval Notation for the bound intervals
 
 2005-03-09  Tim Jenness  <timj@jach.hawaii.edu>
 
