@@ -42,7 +42,7 @@ for (@outside) {
 # change interval
 $r->min( 30 );
 
-is("$r","<=20 and >=30" );
+is("$r","< 20 and > 30" );
 ok($r->isinverted);
 
 # Test arrays

@@ -197,16 +197,16 @@ sub stringify {
     # Bound
     no warnings 'numeric'; #KLUGE
     if ($max < $min) {
-      return "<=$max and >=$min";
+      return "< $max and > $min";
     } else {
       return "$min-$max";
     }
   } elsif (defined $min) {
-    return ">=$min";
+    return "> $min";
   } elsif (defined $max) {
-    return "<=$max";
+    return "< $max";
   } else {
-    return "**ERROR**";
+    return "Inf";
   }
 
 }
@@ -585,9 +585,13 @@ sub intersection {
 
 =back
 
+=head1 NOTES
+
+The default interval is not inclusive of the bounds.
+
 =head1 COPYRIGHT
 
-Copyright (C) 2002-2004 Particle Physics and Astronomy Research Council.
+Copyright (C) 2002-2005 Particle Physics and Astronomy Research Council.
 All Rights Reserved.
 
 This program is free software; you can redistribute it and/or modify it under
