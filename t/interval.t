@@ -3,7 +3,7 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 116;
+use Test::More tests => 121;
 
 require_ok( 'Number::Interval' );
 
@@ -302,3 +302,11 @@ $r1 = new Number::Interval( Min => 4, Max => 4 );
 is( "$r1", "==4", "min == max");
 
 ok( $r1->contains( 4 ), "Does 4==4 contain 4");
+
+# positive definite
+$r1 = new Number::Interval( Max => 4, posdef => 1);
+ok( $r1->pos_def, "is positive definite");
+is( $r1->min, 0, "automatically zero bound");
+ok( $r1->contains( 3 ), "posdef includes 3");
+ok( !$r1->contains( -1 ), "posdef does not include -1");
+is( "$r1", "< 4", "stringify posdef");

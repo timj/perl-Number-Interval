@@ -41,7 +41,17 @@ use overload
 # CVS ID: $Id$
 
 use vars qw/ $VERSION /;
-$VERSION = '0.02';
+$VERSION = '0.03';
+
+# hash of allowed lower-cased constructor keys with
+# corresponding accessor method
+my %ConstructAllowed = (
+			min => 'min',
+			max => 'max',
+			incmax => 'inc_max',
+			incmin => 'inc_min',
+			posdef => 'pos_def',
+		       );
 
 =head1 METHODS
 
@@ -73,6 +83,14 @@ can be included by using the IncMax and IncMin keys.
 
 The above interval is >=5
 
+Positive-definite intervals allow the stringification to ignore
+the lower bound if it is 0 (even if set explicitly).
+
+  $r = new Number::Interval( Max => 5, IncMax => 1, Min => 0, 
+                             PosDef => 1);
+
+The keys are case-insensitive.
+
 =cut
 
 sub new {
@@ -86,16 +104,20 @@ sub new {
 	   Max => undef,
 	   IncMax => 0,
 	   IncMin => 0,
+	   PosDef => 0,
 	  };
 
   # Create object
   my $obj = bless $r, $class;
 
   # Populate it
-  $obj->min( $args{Min}) if exists $args{Min};
-  $obj->max( $args{Max}) if exists $args{Max};
-  $obj->inc_min( $args{IncMin}) if exists $args{IncMin};
-  $obj->inc_max( $args{IncMax}) if exists $args{IncMax};
+  for my $key (keys %args) {
+    my $lc = lc( $key );
+    if (exists $ConstructAllowed{$lc}) {
+      my $method = $ConstructAllowed{$lc};
+      $obj->$method( $args{$key} );
+    }
+  }
 
   return $obj;
 }
@@ -177,6 +199,31 @@ sub inc_min {
   my $self = shift;
   $self->{IncMin} = shift if @_;
   return $self->{IncMin};
+}
+
+=item B<pos_def>
+
+Indicate that the interval is positive definite. This helps the
+stringification method to determine whether the lower bound
+should be included
+
+  $r->pos_def( 1 );
+
+
+If set to true, automatically sets the lower bound to 0 if the lower bound
+is not explicitly defined.
+
+=cut
+
+sub pos_def {
+  my $self = shift;
+  if (@_) {
+    $self->{PosDef} = shift;
+    if ($self->{PosDef} && !defined $self->min) {
+      $self->min( 0 );
+    }
+  }
+  return $self->{PosDef};
 }
 
 =item B<minmax>
@@ -263,7 +310,11 @@ sub stringify {
     } elsif ($max < $min) {
       return "<$inc_max$max and >$inc_min$min";
     } else {
-      return "$min <$inc_min x <$inc_max $max";
+      if ($min <= 0 && $self->pos_def) {
+	return "<$inc_max$max";
+      } else {
+	return "$min <$inc_min x <$inc_max $max";
+      }
     }
   } elsif (defined $min) {
     return ">$inc_min$min";
@@ -373,6 +424,9 @@ If both intervals are undefined, always returns true.
 If the min == max, returns true if the supplied value is that
 value, regardless of IncMin and IncMax setttings.
 
+If the interval is positive definite, always returns false if the
+supplied value is negative.
+
 =cut
 
 sub contains {
@@ -415,6 +469,8 @@ sub contains {
     if (defined $max and defined $min) {
       if ($max == $min) {
 	$contains = 1;
+      } elsif ($self->pos_def && $value < 0) {
+	$contains = 0;
       } elsif ($self->inc_max && $self->inc_min) {
 	if ($value <= $max && $value >= $min) {
 	  $contains = 1;

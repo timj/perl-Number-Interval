@@ -2,6 +2,9 @@
 
 	* Interval.pm (stringify): Recognize that sometimes min == max
 	(contains): If min==max then $range->contains($max)
+	(stringify): Add positive definite setting to allow positive
+	ranges to be stringified without including the 0
+	
 
 2005-03-09  Tim Jenness  <timj@jach.hawaii.edu>
 
@@ -12,6 +15,8 @@
 
 2005-02-11  Tim Jenness  <timj@jach.hawaii.edu>
 
+	---- VERSION 0.02 ----
+	
 	* Interval.pm: Add inc_max and inc_min attributes. Interval can
 	now be inclusive (>= and <=). 
 
