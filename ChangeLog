@@ -1,0 +1,5 @@
+2005-02-10  Tim Jenness  <timj@jach.hawaii.edu>
+
+	* Interval.pm: Always returns true for contains() if both bounds
+	are undefined.
+
