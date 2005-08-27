@@ -3,7 +3,7 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 121;
+use Test::More tests => 134;
 
 require_ok( 'Number::Interval' );
 
@@ -69,7 +69,6 @@ $r = new Number::Interval( Max => 5 );
 ok(!$r->contains( 6 ));
 ok($r->contains( 4 ));
 
-
 # Merging
 
 print "# Merge 2 unbound intervals\n";
@@ -91,8 +90,41 @@ $r1 = new Number::Interval( Max => 4 );
 $r2 = new Number::Interval( Max => 6 );
 
 ok($r1->intersection($r2));
+is($r1->max, 4);
+is($r1->min, undef);
+
+$r1 = new Number::Interval( Min => 4 );
+$r2 = new Number::Interval( Min => 6 );
+
+ok($r1->intersection($r2));
+is($r1->min, 6);
+is($r1->max, undef);
+
+# 2 infinite 
+
+$r1 = new Number::Interval( );
+$r2 = new Number::Interval( );
+
+ok($r1->intersection($r2));
+is($r1->max, undef);
+is($r1->min, undef);
+
+# 1 infinite
+
+$r1 = new Number::Interval( );
+$r2 = new Number::Interval( Max => 6 );
+
+ok($r1->intersection($r2));
 is($r1->max, 6);
 is($r1->min, undef);
+
+$r1 = new Number::Interval( Min => 4);
+$r2 = new Number::Interval(  );
+
+ok($r1->intersection($r2));
+is($r1->min, 4);
+is($r1->max, undef);
+
 
 $r1 = new Number::Interval( Min => 1 );
 $r2 = new Number::Interval( Max => 4 );
@@ -100,6 +132,13 @@ $r2 = new Number::Interval( Max => 4 );
 ok($r1->intersection($r2));
 is($r1->max, 4);
 is($r1->min, 1);
+
+# unbound, no overlap
+
+$r1 = new Number::Interval( Max => 1 );
+$r2 = new Number::Interval( Min => 4 );
+
+ok(!$r1->intersection($r2));
 
 print "# Merge 2 bound intervals\n";
 $r1 = new Number::Interval( Min => 1, Max => 5);

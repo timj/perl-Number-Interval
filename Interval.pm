@@ -743,18 +743,30 @@ sub intersection {
 
   } else {
     # Unbound+Unbound only
-    # Three options here. 
+    # Four options here. 
     # 1. A max and a max =>  max (same for min and min)
     # 2. max and a min with no overlap => no intersection
     # 3. max and min with overlap => bounded interval
-    if (defined $max1 and defined $max2) {
-      $outmax = ( $max1 > $max2 ? $max1 : $max2 );
+    # 4. all undefined
+    if (defined $max1 && defined $max2) {
+      $outmax = ( $max1 < $max2 ? $max1 : $max2 );
+    } elsif (defined $min2 && defined $min1) {
+      $outmin = ( $min1 > $min2 ? $min1 : $min2 );
     } else {
       # max and a min - one must be defined for both
       my $refmax = (defined $max1 ? $max1 : $max2);
       my $refmin = (defined $min1 ? $min1 : $min2);
 
-      if ($refmax > $refmin) {
+      if (!defined $refmax && !defined $refmin) {
+	# infinite bound
+	return 1;
+      } elsif (!defined $refmax) {
+	# just a min
+	$outmin = $refmin;
+      } elsif (!defined $refmin) {
+	# just a max
+	$outmax = $refmax;
+      } elsif ($refmax > $refmin) {
 	# normal bound interval
 	$outmax = $refmax;
 	$outmin = $refmin;

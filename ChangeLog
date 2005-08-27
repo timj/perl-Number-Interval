@@ -1,3 +1,9 @@
+2005-08-26  Tim Jenness  <tjenness@cpan.org>
+
+	* Interval.pm (intersection): Fix unbound+unbound intersections
+	(they were wrong when the intervals were bound in the same
+	direction
+
 2005-03-10  Tim Jenness  <timj@jach.hawaii.edu>
 
 	* Interval.pm (stringify): Recognize that sometimes min == max
