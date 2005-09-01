@@ -3,7 +3,7 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 143;
+use Test::More tests => 152;
 
 require_ok( 'Number::Interval' );
 
@@ -267,6 +267,28 @@ is($r1->min, 0);
 
 $r1 = new Number::Interval( Max => 2);
 $r2 = new Number::Interval( Max => 2, Min => 0 );
+
+ok($r1->intersection($r2));
+is($r1->max, 2);
+is($r1->min, 0);
+
+$r1 = new Number::Interval( Max => 0, Min => 2 );
+$r2 = new Number::Interval();
+
+ok($r1->intersection($r2));
+is($r1->max, 0);
+is($r1->min, 2);
+
+
+$r1 = new Number::Interval( Max => 2, Min => 0 );
+$r2 = new Number::Interval();
+
+ok($r1->intersection($r2));
+is($r1->max, 2);
+is($r1->min, 0);
+
+$r2 = new Number::Interval( Max => 2, Min => 0 );
+$r1 = new Number::Interval();
 
 ok($r1->intersection($r2));
 is($r1->max, 2);

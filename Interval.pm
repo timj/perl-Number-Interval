@@ -668,8 +668,9 @@ sub intersection {
 	    }
 
 	  } else {
-	    croak "This cant happen in Number::Interval[4]\n" .
-	      _formaterr( $min1, $max1, $min2, $max2);
+              # both undefined
+              $outmax = $max1;
+              $outmin = $min1;
 	  }
 
 	}
@@ -737,8 +738,9 @@ sub intersection {
 	  }
 
 	} else {
-	  croak "interval intersection: This cant happen (no limit defined)[1]\n" .
-	    _formaterr( $min1, $max1, $min2, $max2);;
+          # The second interval is unbounded at both ends
+          $outmax = $max1;
+          $outmin = $min1;
 	}
 
 
