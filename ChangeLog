@@ -1,3 +1,8 @@
+2005-08-31  Tim Jenness  <tjenness@cpan.org>
+
+	* Interval.pm (intersection): bound+unbound was failing when the
+	two defined bounds were identical.
+
 2005-08-26  Tim Jenness  <tjenness@cpan.org>
 
 	* Interval.pm (intersection): Fix unbound+unbound intersections

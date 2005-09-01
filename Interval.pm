@@ -31,6 +31,7 @@ use 5.006;
 use strict;
 use warnings;
 use Carp;
+use Data::Dumper;
 use overload 
   '""' => "stringify",
   '==' => 'equate',
@@ -626,7 +627,8 @@ sub intersection {
 
 
 	  } else {
-	    croak "Oops Bug in interval intersection [6]"
+	    croak "Oops Bug in interval intersection [6]\n".
+	      _formaterr( $min1, $max1, $min2, $max2);
 	  }
 
 
@@ -666,7 +668,8 @@ sub intersection {
 	    }
 
 	  } else {
-	    croak "This cant happen in Number::Interval[4]";
+	    croak "This cant happen in Number::Interval[4]\n" .
+	      _formaterr( $min1, $max1, $min2, $max2);
 	  }
 
 	}
@@ -702,37 +705,40 @@ sub intersection {
 	# unbound is now guaranteed to be (2)
 	# Check that unbound max is in interval
 	if (defined $max2) {
-	  if ($max2 < $max1 && $max2 > $min1) {
+	  if ($max2 <= $max1 && $max2 >= $min1) {
 	    # inside interval
 	    $outmax = $max2;
 	    $outmin = $min1;
-	  } elsif ($max2 < $min1) {
+	  } elsif ($max2 <= $min1) {
 	    # outside interval. No intersection
-	  } elsif ($max2 > $max1) {
+	  } elsif ($max2 >= $max1) {
 	    # below interval. irrelevant
 	    $outmax = $max1;
 	    $outmin = $min1;
 	  } else {
-	    croak "Number::Interval - This should not happen[2]";
+	    croak "Number::Interval - This should not happen[2]\n".
+	      _formaterr( $min1, $max1, $min2, $max2);
 	  }
 
 	} elsif (defined $min2) {
-	  if ($min2 < $max1 && $min2 > $min1) {
+	  if ($min2 <= $max1 && $min2 >= $min1) {
 	    # inside interval
 	    $outmax = $max1;
 	    $outmin = $min2;
-	  } elsif ($min2 > $max1) {
+	  } elsif ($min2 >= $max1) {
 	    # outside interval. No intersection
-	  } elsif ($min2 < $min1) {
+	  } elsif ($min2 <= $min1) {
 	    # below interval. irrelevant
 	    $outmax = $max1;
 	    $outmin = $min1;
 	  } else {
-	    croak "Number::Interval - This should not happen[3]";
+	    croak "Number::Interval - This should not happen[3]:\n" .
+	      _formaterr( $min1, $max1, $min2, $max2);
 	  }
 
 	} else {
-	  croak "interval intersection: This cant happen (no limit defined)[1]";
+	  croak "interval intersection: This cant happen (no limit defined)[1]\n" .
+	    _formaterr( $min1, $max1, $min2, $max2);;
 	}
 
 
@@ -789,6 +795,18 @@ sub intersection {
     return 0;
   }
 
+}
+
+sub _formaterr {
+  my ($min1, $max1, $min2, $max2) = @_;
+  return "Comparing : (".
+    (defined $min1 ? $min1 : "<undef>" ).
+      "," . 
+	(defined $max1 ? $max1 : "<undef>" ).
+	  ") with (".
+	    (defined $min2 ? $min2 : "<undef>" ).
+	      "," . (defined $max2 ? $max2 : "<undef>" ).
+		")";
 }
 
 =back

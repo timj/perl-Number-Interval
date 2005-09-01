@@ -3,7 +3,7 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 134;
+use Test::More tests => 143;
 
 require_ok( 'Number::Interval' );
 
@@ -250,6 +250,27 @@ $r2 = new Number::Interval( Min => 6, Max => 7 );
 ok($r1->intersection($r2));
 is($r1->max, 7);
 is($r1->min, 6);
+
+$r1 = new Number::Interval( Min => 0);
+$r2 = new Number::Interval( Min => 0, Max => 2 );
+
+ok($r1->intersection($r2));
+is($r1->max, 2);
+is($r1->min, 0);
+
+$r2 = new Number::Interval( Min => 0);
+$r1 = new Number::Interval( Min => 0, Max => 2 );
+
+ok($r1->intersection($r2));
+is($r1->max, 2);
+is($r1->min, 0);
+
+$r1 = new Number::Interval( Max => 2);
+$r2 = new Number::Interval( Max => 2, Min => 0 );
+
+ok($r1->intersection($r2));
+is($r1->max, 2);
+is($r1->min, 0);
 
 
 print "# 1 inverted and 1 unbound\n";
