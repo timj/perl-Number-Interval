@@ -475,7 +475,7 @@ sub contains {
     # normal interval
     if (defined $max and defined $min) {
       if ($max == $min) {
-	$contains = 1;
+	$contains = 1 if $value == $max;
       } elsif ($self->pos_def && $value < 0) {
 	$contains = 0;
       } elsif ($self->inc_max && $self->inc_min) {

@@ -1,3 +1,8 @@
+2006-08-08  Tim Jenness  <timj@apele.jach.hawaii.edu>
+
+	* Interval.pm (contains): Fix case when max == min to make sure
+	that contains() only returns true if the value == max == min.
+
 2005-08-31  Tim Jenness  <tjenness@cpan.org>
 
 	* Interval.pm (intersection): bound+unbound was failing when the
@@ -6,8 +11,7 @@
 2005-08-26  Tim Jenness  <tjenness@cpan.org>
 
 	* Interval.pm (intersection): Fix unbound+unbound intersections
-	(they were wrong when the intervals were bound in the same
-	direction
+	(they were wrong when the intervals were bound in the same direction)
 
 2005-03-10  Tim Jenness  <timj@jach.hawaii.edu>
 
