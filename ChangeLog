@@ -2,6 +2,7 @@
 
 	* Interval.pm (contains): Fix case when max == min to make sure
 	that contains() only returns true if the value == max == min.
+	(copy):  Add copy constructor.
 
 2005-08-31  Tim Jenness  <tjenness@cpan.org>
 

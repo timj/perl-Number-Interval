@@ -123,6 +123,23 @@ sub new {
   return $obj;
 }
 
+=item B<copy>
+
+Copy the contents of the current object into a new object and return it.
+
+ $new = $r->copy;
+
+=cut
+
+sub copy {
+  my $self = shift;
+  my $new = $self->new();
+  # simplistic hash copy since we know that we are a simple hash internally
+  # subclasses might get in trouble if they have complexity.
+  %$new = %$self;
+  return $new;
+}
+
 =back
 
 =head2 Accessors

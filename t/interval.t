@@ -3,7 +3,7 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 153;
+use Test::More tests => 159;
 
 require_ok( 'Number::Interval' );
 
@@ -393,3 +393,12 @@ is( $r1->min, 0, "automatically zero bound");
 ok( $r1->contains( 3 ), "posdef includes 3");
 ok( !$r1->contains( -1 ), "posdef does not include -1");
 is( "$r1", "< 4", "stringify posdef");
+
+# copy constructor
+$r2 = $r1->copy;
+isa_ok($r2, "Number::Interval");
+ok( $r2->pos_def, "is positive definite");
+is( $r2->min, 0, "automatically zero bound");
+ok( $r2->contains( 3 ), "posdef includes 3");
+ok( !$r2->contains( -1 ), "posdef does not include -1");
+is( "$r2", "< 4", "stringify posdef");
