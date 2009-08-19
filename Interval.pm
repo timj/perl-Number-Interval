@@ -42,7 +42,7 @@ use overload
 # CVS ID: $Id$
 
 use vars qw/ $VERSION /;
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 # hash of allowed lower-cased constructor keys with
 # corresponding accessor method
@@ -296,6 +296,27 @@ sub minmax_hash {
   $minmax{max} = $self->max if defined $self->max;
 
   return (wantarray ? %minmax : \%minmax);
+}
+
+=item B<sizeof>
+
+Returns the size of the interval.
+
+  $sizeof = $r->sizeof;
+
+If either of the lower or upper ends are unbounded, then C<undef> will
+be returned.
+
+=cut
+
+sub sizeof {
+  my $self = shift;
+  if( ! defined( $self->min ) ||
+      ! defined( $self->max ) ) {
+    return undef;
+  }
+
+  return abs( $self->max - $self->min );
 }
 
 =back

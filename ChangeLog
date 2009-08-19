@@ -1,3 +1,8 @@
+2009-08-18  Brad Cavanagh <brad.cavanagh@gmail.com>
+
+  * Interval.pm (sizeof): Add sizeof() method to return size of
+  interval.
+
 2006-08-08  Tim Jenness  <timj@apele.jach.hawaii.edu>
 
 	* Interval.pm (contains): Fix case when max == min to make sure

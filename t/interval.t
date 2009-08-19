@@ -3,7 +3,7 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 159;
+use Test::More tests => 164;
 
 require_ok( 'Number::Interval' );
 
@@ -402,3 +402,15 @@ is( $r2->min, 0, "automatically zero bound");
 ok( $r2->contains( 3 ), "posdef includes 3");
 ok( !$r2->contains( -1 ), "posdef does not include -1");
 is( "$r2", "< 4", "stringify posdef");
+
+# Test sizeof
+my $r_sizeof = new Number::Interval( Min => 4, Max => 12 );
+is( $r_sizeof->sizeof, 8, "sizeof of bounded interval" );
+$r_sizeof->max( undef );
+is( $r_sizeof->sizeof, undef, "sizeof of unbounded interval" );
+$r_sizeof->min( undef );
+is( $r_sizeof->sizeof, undef, "sizeof of unbounded interval (2)" );
+$r_sizeof->max( 12 );
+is( $r_sizeof->sizeof, undef, "sizeof of unbounded interval (3)" );
+$r_sizeof->min( 18 );
+is( $r_sizeof->sizeof, 6, "sizeof of reversed interval" );

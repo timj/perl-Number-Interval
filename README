@@ -1,6 +1,6 @@
 Number::Interval - A representation of a numeric interval
 
-This is release V0.01 of Number::Interval. This module can be used to
+This is release V0.04 of Number::Interval. This module can be used to
 specify bound or unbound intervals (ie a max and a min value, a max
 only or a min only) and then compare them with other intervals, find
 out whether a number is within the interval and provide a stringified form
@@ -26,12 +26,14 @@ Written completely in Perl. XS is not required.
 Does not require any additional modules to run, although the tests
 require Test::More.
 
-AUTHOR
+AUTHORS
 
 Tim Jenness <tjenness@cpan.org>
+Brad Cavanagh <brad.cavanagh@gmail.com>
 
 Copyright (C) 2002 - 2004 UK Particle Physics and Astronomy Research
-Council. All Rights Reserved.
+Council. Copyright (C) 2009 Science and Technology Facilities Council.
+All Rights Reserved.
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
