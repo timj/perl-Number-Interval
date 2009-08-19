@@ -1,6 +1,7 @@
-Interval.pm
+lib/Number/Interval.pm
 MANIFEST
 Build.PL
 README
 t/interval.t
+ChangeLog
 META.yml                                 Module meta-data (added by MakeMaker)
