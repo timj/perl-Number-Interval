@@ -1,6 +1,6 @@
 Interval.pm
 MANIFEST
-Makefile.PL
+Build.PL
 README
 t/interval.t
 META.yml                                 Module meta-data (added by MakeMaker)
