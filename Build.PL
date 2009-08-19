@@ -10,7 +10,7 @@ my $build = Module::Build->new
    module_name => 'Number::Interval',
    license  => 'gpl',
    dist_abstract => 'Representation of a numeric interval',
-   dist_author => 'Tim X. Jenness <t.jenness@jach.hawaii.edu>',
+   dist_author => 'Tim Jenness <tjenness@cpan.org>',
    dist_version_from => 'Interval.pm',
    meta_merge => {
                resources =>  {repository => "git://github.com/timj/perl-Number-Interval.git",
