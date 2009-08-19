@@ -42,7 +42,7 @@ use overload
 # CVS ID: $Id$
 
 use vars qw/ $VERSION /;
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 # hash of allowed lower-cased constructor keys with
 # corresponding accessor method

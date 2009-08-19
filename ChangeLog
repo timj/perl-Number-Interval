@@ -2,6 +2,7 @@
 
   * Interval.pm (sizeof): Add sizeof() method to return size of
   interval.
+  * Switched from ExtUtils::MakeMaker to Module::Build.
 
 2006-08-08  Tim Jenness  <timj@apele.jach.hawaii.edu>
 
