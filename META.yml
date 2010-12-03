@@ -1,19 +1,23 @@
 ---
-name: Number-Interval
-version: 0.05
+abstract: 'Representation of a numeric interval'
 author:
   - 'Tim Jenness <tjenness@cpan.org>'
-abstract: Representation of a numeric interval
+build_requires:
+  Test::More: 0
+configure_requires:
+  Module::Build: 0.36
+generated_by: 'Module::Build version 0.3607'
 license: gpl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Number-Interval
+provides:
+  Number::Interval:
+    file: lib/Number/Interval.pm
+    version: 0.05
 resources:
   homepage: http://github.com/timj/perl-Number-Interval/tree/master
   license: http://opensource.org/licenses/gpl-license.php
   repository: git://github.com/timj/perl-Number-Interval.git
-build_requires:
-  Test::More: 0
-configure_requires:
-  Module::Build: 0.3306
-generated_by: Module::Build version 0.3306
-meta-spec:
-  url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+version: 0.05
