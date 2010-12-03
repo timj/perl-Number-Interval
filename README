@@ -51,5 +51,15 @@ terms as Perl itself.
 
 CHANGES IN THIS RELEASE
 
+V0.05 Many fixes since 0.01
+      * Add sizeof() method
+      * Use Module::Build
+      * Add copy() method
+      * Fix max==min case
+      * Fix problems with intersections
+      * Use interval notation
+      * Add inclusive bounds
+      * Add notequal() method
+
 V0.01 First public release. Extracted from the JAC OMP code tree
       (see http://omp.jach.hawaii.edu)
