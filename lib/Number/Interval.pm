@@ -830,6 +830,23 @@ sub intersection {
 
   # Modify object if we have new values
   if (defined $outmax or defined $outmin) {
+    # Need to check the inc_min and inc_max settings
+    my $inc_max = $self->_checkinc( $outmax, $max1, $max2,
+				    $self->inc_max, $new->inc_max );
+    my $inc_min = $self->_checkinc( $outmin, $min1, $min2,
+				    $self->inc_min, $new->inc_min );
+
+    # Abort if the min and max are the same and we
+    # are not including the bounds in the interval
+    if (defined $outmax && defined $outmin &&
+	$outmax == $outmin &&
+	(!$inc_max || !$inc_min)
+       ) {
+      return 0;
+    }
+
+    $self->inc_min( $inc_min );
+    $self->inc_max( $inc_max );
     $self->max($outmax);
     $self->min($outmin);
     return 1;
@@ -837,6 +854,31 @@ sub intersection {
     return 0;
   }
 
+}
+
+# Given
+sub _checkinc {
+  my $self = shift;
+  my $newval = shift;
+  my $ref1 = shift;
+  my $ref2 = shift;
+  my $inc1 = shift;
+  my $inc2 = shift;
+
+  my $inc_val = $inc1;
+  if (defined $newval) {
+    if (defined $ref1 && $ref1 == $newval &&
+	defined $ref2 && $ref2 == $newval) {
+      # value comes from both so we want the least
+      # inclusive inc_max value
+      $inc_val = 0 if (!$inc1 || !$inc2);
+    } elsif (defined $ref2 && $ref2 == $newval) {
+      # this value comes from ref2 so we copy
+      # inc from #2
+      $inc_val = $inc2;
+    }
+  }
+  return $inc_val;
 }
 
 sub _formaterr {

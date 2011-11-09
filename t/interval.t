@@ -3,7 +3,7 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 165;
+use Test::More tests => 183;
 
 require_ok( 'Number::Interval' );
 
@@ -341,6 +341,43 @@ ok($r1->intersection($r2));
 is($r1->max, 1);
 is($r1->min, 5);
 
+# Check bounds that touch
+$r1 = Number::Interval->new(Min => 1, Max => 2, IncMax => 0);
+$r2 = Number::Interval->new(Min => 2, IncMin => 0, Max => 3);
+ok( !$r1->intersection($r2) );
+
+$r1 = Number::Interval->new(Min => 1, Max => 2, IncMax => 0);
+$r2 = Number::Interval->new(Min => 2, IncMin => 1, Max => 3);
+ok( !$r1->intersection($r2) );
+
+$r1 = Number::Interval->new(Min => 1, Max => 2, IncMax => 1);
+$r2 = Number::Interval->new(Min => 2, IncMin => 1, Max => 3);
+ok( $r1->intersection($r2) );
+
+# Check inc_max/min flags
+$r1 = Number::Interval->new(Min => 1, Max => 3, IncMax => 1);
+$r2 = Number::Interval->new(Min => 2, IncMin => 1, Max => 4);
+ok( $r1->intersection($r2) );
+is($r1->min, 2 );
+is($r1->max, 3 );
+ok($r1->inc_min );
+ok($r1->inc_max );
+
+$r1 = Number::Interval->new(Min => 1, Max => 3, IncMin=> 1, IncMax => 1);
+$r2 = Number::Interval->new(Min => 2, IncMin => 0, Max => 4);
+ok( $r1->intersection($r2) );
+is($r1->min, 2 );
+is($r1->max, 3 );
+ok(!$r1->inc_min );
+ok($r1->inc_max );
+
+$r1 = Number::Interval->new(Min => 1, Max => 3, IncMin=> 1, IncMax => 1);
+$r2 = Number::Interval->new(Min => 2, IncMin => 0, IncMax=> 0, Max => 3);
+ok( $r1->intersection($r2) );
+is($r1->min, 2 );
+is($r1->max, 3 );
+ok(!$r1->inc_min );
+ok(!$r1->inc_max );
 
 # Inclusive interval
 my $int2 = new Number::Interval( Min => 5, Max => 10, IncMin => 1);
