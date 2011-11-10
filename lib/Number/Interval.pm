@@ -42,7 +42,7 @@ use overload
 # CVS ID: $Id$
 
 use vars qw/ $VERSION /;
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 # hash of allowed lower-cased constructor keys with
 # corresponding accessor method
@@ -901,7 +901,7 @@ The default interval is not inclusive of the bounds.
 
 =head1 COPYRIGHT
 
-Copyright (C) 2009 Science and Technology Facilities Council.
+Copyright (C) 2009-2011 Science and Technology Facilities Council.
 Copyright (C) 2002-2005 Particle Physics and Astronomy Research Council.
 All Rights Reserved.
 

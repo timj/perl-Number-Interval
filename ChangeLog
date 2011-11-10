@@ -1,3 +1,11 @@
+2011-11-09  Timothy Jenness  <tjenness@cpan.org>
+
+	* lib/Number/Interval.pm: Release v0.06 to CPAN
+
+2011-11-08  Timothy Jenness  <tjenness@cpan.org>
+
+	* lib/Number/Interval.pm: Fix intersection() to use inc_min and inc_max
+
 2010-12-03  Tim Jenness  <tjenness@cpan.org>
 
 	* lib/Number/Interval.pm: Release v0.05 to CPAN
