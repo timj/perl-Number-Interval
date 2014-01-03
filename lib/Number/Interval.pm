@@ -838,9 +838,15 @@ sub intersection {
 
     # Abort if the min and max are the same and we
     # are not including the bounds in the interval
+    # unless one of the intervals is a single value
+    # because in that case the documentation for
+    # contains() indicates that inc_min and inc_max
+    # are ignored.
     if (defined $outmax && defined $outmin &&
 	$outmax == $outmin &&
 	(!$inc_max || !$inc_min)
+        && ($bound1 && $max1 != $min1)
+        && ($bound2 && $max2 != $min2)
        ) {
       return 0;
     }
