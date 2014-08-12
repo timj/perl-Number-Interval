@@ -3,7 +3,7 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 185;
+use Test::More tests => 197;
 
 require_ok( 'Number::Interval' );
 
@@ -68,6 +68,36 @@ ok(!$r->contains( 4 ));
 $r = new Number::Interval( Max => 5 );
 ok(!$r->contains( 6 ));
 ok($r->contains( 4 ));
+
+# IncMin, IncMax contains behavior for non-inverted intervals
+
+$r = new Number::Interval(Min => 4, Max => 8);
+ok(! $r->contains(4), '4  < 4  < 8 is false');
+ok(! $r->contains(8), '4  < 8  < 8 is false');
+
+$r = new Number::Interval(Min => 4, Max => 8, IncMin => 1);
+ok(  $r->contains(4), '4 <= 4  < 8 is true');
+ok(! $r->contains(8), '4 <= 8  < 8 is false');
+
+$r = new Number::Interval(Min => 4, Max => 8, IncMax => 1);
+ok(! $r->contains(4), '4  < 4 <= 8 is false');
+ok(  $r->contains(8), '4  < 8 <= 8 is true');
+
+$r = new Number::Interval(Min => 4, Max => 8, IncMin => 1, IncMax => 1);
+ok(  $r->contains(4), '4 <= 4 <= 8 is true');
+ok(  $r->contains(8), '4 <= 8 <= 8 is true');
+
+$r = new Number::Interval(Min => 4);
+ok(! $r->contains(4), '4  < 4 is false');
+
+$r = new Number::Interval(Min => 4, IncMin => 1);
+ok(  $r->contains(4), '4 <= 4 is true');
+
+$r = new Number::Interval(Max => 8);
+ok(! $r->contains(8), '8  < 8 is false');
+
+$r = new Number::Interval(Max => 8, IncMax => 1);
+ok(  $r->contains(8), '8 <= 8 is true');
 
 # Merging
 
