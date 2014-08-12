@@ -539,7 +539,7 @@ sub contains {
       if ($self->inc_max) {
 	$contains = 1 if $value <= $max;
       } else {
-	$contains = 1 if $value <= $max;
+	$contains = 1 if $value < $max;
       }
     } elsif (defined $min) {
       if ($self->inc_min) {
