@@ -3,7 +3,7 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 197;
+use Test::More tests => 199;
 
 require_ok( 'Number::Interval' );
 
@@ -418,12 +418,18 @@ ok( !$int2->contains( 10 ), "Does not contain 10");
 ok( !$int2->contains( 4 ), "Does not contain 4");
 
 # Intersections involving single values
-$r1 = new Number::Interval(Min => 0, Max => 0);
+$r1 = new Number::Interval(Min => 0, Max => 0, IncMin => 1, IncMax => 1);
 $r2 = new Number::Interval(Max => 100.0);
 my $int1 = $r1->copy();
 $int2 = $r2->copy();
 ok($r2->intersection($r1), 'intersection with a single value');
 ok($int1->intersection($int2), 'intersection of a single value');
+$r1 = new Number::Interval(Min => 0, Max => 0);
+$r2 = new Number::Interval(Max => 100.0);
+$int1 = $r1->copy();
+$int2 = $r2->copy();
+ok(! $r2->intersection($r1), 'intersection with an exclusive single value');
+ok(! $int1->intersection($int2), 'intersection of an exclusive single value');
 
 # Test equality
 $r1 = new Number::Interval( Max => 20, Min => 4);
