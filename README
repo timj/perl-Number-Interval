@@ -1,6 +1,6 @@
 Number::Interval - A representation of a numeric interval
 
-This is release V0.06 of Number::Interval. This module can be used to
+This is release V0.07 of Number::Interval. This module can be used to
 specify bound or unbound intervals (ie a max and a min value, a max
 only or a min only) and then compare them with other intervals, find
 out whether a number is within the interval and provide a stringified form
@@ -50,6 +50,11 @@ Place,Suite 330, Boston, MA  02111-1307, USA
 terms as Perl itself.
 
 CHANGES IN THIS RELEASE
+
+V0.07 * Update POD documentation of contains().
+      * Change stringification of non-inclusive single-value
+        intervals (which match nothing since V0.06).
+      * Bug fixes for contains() and intersection().
 
 V0.06 * Fix intersection() to respect inc_min and inc_max
         (Fixes RT #72281 (Gianluca Torta))

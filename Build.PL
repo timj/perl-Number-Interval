@@ -8,7 +8,7 @@ use Module::Build;
 my $build = Module::Build->new
   (
    module_name => 'Number::Interval',
-   license  => 'gpl',
+   license  => 'gpl2',
    dist_abstract => 'Representation of a numeric interval',
    dist_author => 'Tim Jenness <tjenness@cpan.org>',
    meta_merge => {

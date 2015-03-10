@@ -6,3 +6,4 @@ README
 t/interval.t
 ChangeLog
 META.yml
+META.json

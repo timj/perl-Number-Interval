@@ -1,3 +1,7 @@
+2015-03-10  Graham Belll <g.bell@eaobservatory.org>
+
+	* lib/Number/Interval.pm: Release v0.07 to CPAN
+
 2011-11-09  Timothy Jenness  <tjenness@cpan.org>
 
 	* lib/Number/Interval.pm: Release v0.06 to CPAN
