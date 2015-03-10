@@ -472,8 +472,10 @@ Determine whether a supplied value is within the defined intervals.
 
 If both intervals are undefined, always returns true.
 
-If the min == max, returns true if the supplied value is that
-value, regardless of IncMin and IncMax setttings.
+B<Note:> If the min == max, returns true if the supplied value is that
+value, but only if either IncMin or IncMax is true.
+I<This is a change in version 0.06:> previously this method returned
+true in this case regardless of IncMin and IncMax setttings.
 
 If the interval is positive definite, always returns false if the
 supplied value is negative.
