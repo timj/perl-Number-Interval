@@ -3,7 +3,7 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 199;
+use Test::More tests => 204;
 
 require_ok( 'Number::Interval' );
 
@@ -462,12 +462,19 @@ ok($r1 != $r2,"not equal to >= 4 (with incmax set)");
 
 # min == max
 $r1 = new Number::Interval( Min => 4, Max => 4 );
-is( "$r1", "==4", "min == max");
+is( "$r1", "{}", "min == max");
 
 ok( ! $r1->contains( 4 ), "(4,4) does not contain 4");
 $r1->inc_min(1);
+is( "$r1", "==4", "min == max");
 ok( $r1->contains(4), "[4,4) does contain 4");
 ok( !$r1->contains( 5 ), "[4,4) does not contain 5");
+$r1->inc_max(1);
+is( "$r1", "==4", "min == max");
+ok( $r1->contains(4), "[4,4] does contain 4");
+$r1->inc_min(0);
+is( "$r1", "==4", "min == max");
+ok( $r1->contains(4), "(4,4] does contain 4");
 
 # positive definite
 $r1 = new Number::Interval( Max => 4, posdef => 1);

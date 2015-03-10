@@ -351,7 +351,13 @@ sub stringify {
 
     if ($min == $max) {
       # no range
-      return "==$min";
+      if ($self->inc_min() or $self->inc_max()) {
+        # A single value.
+        return "==$min";
+      } else {
+        # This interval matches nothing.
+        return "{}";
+      }
     } elsif ($max < $min) {
       return "<$inc_max_ub$max and >$inc_min_ub$min";
     } else {
