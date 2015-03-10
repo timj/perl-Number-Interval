@@ -583,24 +583,28 @@ so the routine dies if such a situation arises.
 
 sub intersection {
   my $self = shift;
-  my $new = shift;
+  my $int2 = shift;
 
   # Check input
-  return 0 unless defined $new;
-  return 0 unless UNIVERSAL::isa($new,"Number::Interval");
+  return 0 unless defined $int2;
+  return 0 unless UNIVERSAL::isa($int2,"Number::Interval");
+
+  # Create an alternate reference to $self to use in case of swapping
+  # the variables around.
+  my $int1 = $self;
 
   # Get the values
-  my $max1 = $self->max;
-  my $min1 = $self->min;
-  my $max2 = $new->max;
-  my $min2 = $new->min;
+  my $max1 = $int1->max;
+  my $min1 = $int1->min;
+  my $max2 = $int2->max;
+  my $min2 = $int2->min;
 
-  my $inverted1 = $self->isinverted;
-  my $inverted2 = $new->isinverted;
+  my $inverted1 = $int1->isinverted;
+  my $inverted2 = $int2->isinverted;
   my $inverted = $inverted1 || $inverted2;
 
-  my $bound1 = $self->isbound;
-  my $bound2 = $new->isbound;
+  my $bound1 = $int1->isbound;
+  my $bound2 = $int2->isbound;
   my $bound  = $bound1 || $bound2;
 
   my $outmax;
@@ -628,7 +632,8 @@ sub intersection {
 	# swap if needed, to have everything as IX
 	my $nowbound;
 	if ($inverted2) {
-	  ($max1,$min1,$max2,$min2) = ($max2,$min2,$max1,$min1);
+	  ($max1,$min1,$max2,$min2,$int1,$int2) =
+            ($max2,$min2,$max1,$min1,$int2,$int1);
 	  # determine bound state of #1 before losing order information
 	  $nowbound = $bound1;
 	} else {
@@ -740,7 +745,8 @@ sub intersection {
 	#print "---------- BU/UB -----------\n";
 	# swap if needed, to have everything as BU
 	if ($bound2) {
-	  ($max1,$min1,$max2,$min2) = ($max2,$min2,$max1,$min1);
+	  ($max1,$min1,$max2,$min2,$int1,$int2) =
+            ($max2,$min2,$max1,$min1,$int2,$int1);
 	}
 
 	# unbound is now guaranteed to be (2)
@@ -832,9 +838,9 @@ sub intersection {
   if (defined $outmax or defined $outmin) {
     # Need to check the inc_min and inc_max settings
     my $inc_max = $self->_checkinc( $outmax, $max1, $max2,
-				    $self->inc_max, $new->inc_max );
+				    $int1->inc_max, $int2->inc_max );
     my $inc_min = $self->_checkinc( $outmin, $min1, $min2,
-				    $self->inc_min, $new->inc_min );
+				    $int1->inc_min, $int2->inc_min );
 
     # Abort if the min and max are the same and we
     # are not including the bounds in the interval
