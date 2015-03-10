@@ -1,4 +1,5 @@
 MYMETA.yml
+MYMETA.json
 *.tar.gz
 blib
 _build
